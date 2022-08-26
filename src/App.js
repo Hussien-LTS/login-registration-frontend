@@ -1,23 +1,23 @@
+import { Route, Routes, Navigate } from "react-router-dom";
+import React from "react";
 
+import Login from "./componenets/Login";
+import Register from "./componenets/Register";
+import User from "./componenets/User";
 
-function App() {
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const App = () => {
+ 
+  const user = localStorage.getItem("token");
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      {user && <Route path="/User" exact element={<User />} />}
+      <Route path="/register" exact element={<Register />} />
+      <Route path="/login" exact element={<Login />} />
+      <Route path="/" element={<Navigate replace to="/Register" />} />
+    </Routes>
   );
-}
+};
 
 export default App;
