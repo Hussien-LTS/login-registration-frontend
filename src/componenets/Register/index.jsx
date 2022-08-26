@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 
@@ -49,6 +49,7 @@ const Register = () => {
     try {
       const url = "http://localhost:3001/v1/register";
       data.country = selecteCountry.label;
+      // eslint-disable-next-line
       const { data: res } = await axios.post(url, data);
       navigate("/login");
     } catch (error) {
@@ -111,7 +112,8 @@ const Register = () => {
                   label="I agree to the terms and conditions "
                   onClick={handleAllowSiginUpTerms}
                 />{" "}
-                <a href="#" >
+                
+                <a href="/register" >
                   terms and conditions
                 </a>
               </div>
@@ -123,7 +125,7 @@ const Register = () => {
                   label="I agree to the privacy policy "
                   onClick={handleAllowSiginUpPrivacy}
                 />{" "}
-                <a href="#" >
+                <a href="/register" >
                   privacy policy
                 </a>
               </div>
