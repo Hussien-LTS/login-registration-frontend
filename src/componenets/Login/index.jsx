@@ -54,14 +54,15 @@ const Login = () => {
           value={data.password}
         />
         <Form.Text>
-          <a href="#">Forget Password?</a>
+          
+          <a href="/">Forget Password?</a>
         </Form.Text>
         <Button className={styles.btn} variant="primary">
           Sigin in
         </Button>
         <div>
           <p className={styles.text}>Don't have an account? </p>
-          <Link  to="/register">
+          <Link  to="/">
             <span type="button">Sigin up</span>
           </Link>
         </div>
