@@ -1,13 +1,13 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 
 import axios from "axios";
 
 import CountrySelector from "../CountrySelector";
-import Input from "../Input";
+import Input from "../CustomInput";
 
-import styles from "../styles.module.css";
+import styles from "./styles.module.css";
 
 const Register = () => {
   const [data, setData] = useState({
@@ -24,10 +24,16 @@ const Register = () => {
   const [allowSiginUpprivacy, setAllowSiginUpPrivacy] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = ({ currentTarget: input }) => {
+  const handleNameChange = ({ currentTarget: input }) => {
+    setData({ ...data, [input.name]: input.value });
+  };
+  const handlePasswordChange = ({ currentTarget: input }) => {
     setData({ ...data, [input.name]: input.value });
   };
 
+  const handleEmailChange = ({ currentTarget: input }) => {
+    setData({ ...data, [input.name]: input.value });
+  };
   const handleCheck = ({ currentTarget: input }) => {
     input.value === ""
       ? setPasswordError(false)
@@ -53,95 +59,96 @@ const Register = () => {
       const { data: res } = await axios.post(url, data);
       navigate("/login");
     } catch (error) {
-      setError(error.response.data.message);
+      if (selecteCountry === null) {
+        setError("Kindly Choose a Country");
+      } else {
+        setError(error.response.data.message);
+      }
     }
   };
   return (
-      <div className={styles.centered}>
-          <Form onSubmit={handleSubmit}>
-            {error && <div>{error}</div>}
-            <h1>Sigin up</h1>
-
-            <Input
-              controlId="formBasicEmail"
-              type="email"
-              placeholder="Email"
-              name="email"
-              onChange={handleChange}
-              value={data.email}
-            />
-
-            <Input
-              controlId="formBasicPassword"
-              type="password"
-              placeholder="Password"
-              name="password"
-              onChange={handleChange}
-              value={data.password}
-            />
-
-            <Input
-              controlId="formBasicName"
-              type="name"
-              placeholder="Name"
-              name="name"
-              onChange={handleChange}
-              value={data.name}
-            />
-
-            {passwordError && <div>Confirm password is not matched</div>}
-            <Input
-              controlId="formBasicConfirmPassword"
-              type="password"
-              placeholder="Confirm Password"
-              name="confirmPassword"
-              onChange={handleCheck}
-              value={data.confirmPassword}
-            />
-
-            <Form.Group className="mb-3" controlId="formBasicCountrySelector">
-              <CountrySelector setSelecteCountry={setSelecteCountry} />
-            </Form.Group>
-
+    <div className={styles.centered}>
+      <Form onSubmit={handleSubmit}>
+        {error && <div className={styles.errors}>{error}</div>}
+        <h1 className={styles.title}>Sigin up</h1>
+        <div>
+          <Input
+            controlId="formBasicEmail"
+            type="email"
+            placeholder="Email"
+            name="email"
+            onChange={handleEmailChange}
+            value={data.email}
+          />
+          <Input
+            controlId="formBasicName"
+            type="name"
+            placeholder="Name"
+            name="name"
+            onChange={handleNameChange}
+            value={data.name}
+          />
+          <Input
+            controlId="formBasicPassword"
+            type="password"
+            placeholder="Password"
+            name="password"
+            onChange={handlePasswordChange}
+            value={data.password}
+          />
+        </div>
+        <div>
+          {passwordError && (
+            <div className={styles.errors}>Confirm password is not matched</div>
+          )}
+          <Input
+            controlId="formBasicConfirmPassword"
+            type="password"
+            placeholder="Confirm Password"
+            name="confirmPassword"
+            onChange={handleCheck}
+            value={data.confirmPassword}
+          />
+        </div>
+        <div className={styles.countryselector}>
+          <div className={styles.countryselector2}>
+            <CountrySelector setSelecteCountry={setSelecteCountry} />
+          </div>{" "}
+        </div>
+        <div>
+          <div className={styles.footer}>
             <div>
-              <div className="mb-3">
-                <Form.Check
-                  style={{ display: "inline", textDecoration: "none" }}
-                  name="terms"
-                  id="checkbox"
-                  label="I agree to the terms and conditions "
-                  onClick={handleAllowSiginUpTerms}
-                />{" "}
-                
-                <a href="/register" >
-                  terms and conditions
-                </a>
-              </div>
-              <div className="mb-3">
-                <Form.Check
-                  style={{ display: "inline" }}
-                  name="privacy"
-                  id="checkbox"
-                  label="I agree to the privacy policy "
-                  onClick={handleAllowSiginUpPrivacy}
-                />{" "}
-                <a href="/register" >
-                  privacy policy
-                </a>
-              </div>
-
-              <Button
-                className={styles.btn}
-                variant="primary"
-                disabled={
-                  !allowSiginUpTerms || !allowSiginUpprivacy ? true : false
-                }
-              >
-                Sigin up
-              </Button>
+              <Form.Check
+                className={styles.formcheck}
+                name="terms"
+                id="termsCheckbox"
+                label="I agree to the"
+                onClick={handleAllowSiginUpTerms}
+              />{" "}
+              <a href="/register">terms and conditions</a>
+              <Form.Check
+                className={styles.formcheck}
+                name="privacy"
+                id="privacyCheckbox"
+                label="I agree to the "
+                onClick={handleAllowSiginUpPrivacy}
+              />{" "}
+              <a href="/register">privacy policy</a>
             </div>
-          </Form>
-      </div>
+            <Button
+              className={styles.btn}
+              variant="primary"
+              disabled={
+                !allowSiginUpTerms || !allowSiginUpprivacy ? true : false
+              }
+              type="submit"
+            >
+              Sigin up
+            </Button>
+          </div>
+        </div>
+      </Form>
+    </div>
   );
 };
 
