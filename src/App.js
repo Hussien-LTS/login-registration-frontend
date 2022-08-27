@@ -5,10 +5,9 @@ import Login from "./componenets/Login";
 import Register from "./componenets/Register";
 import User from "./componenets/User";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
- 
   const user = localStorage.getItem("token");
   return (
     <Routes>

@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, Form } from "react-bootstrap";
 
 import axios from "axios";
 
-import Input from "../Input";
+import Input from "../CustomInput";
 
-import styles from "../styles.module.css";
+import styles from "./styles.module.css";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -25,8 +25,9 @@ const Login = () => {
     try {
       const url = "http://localhost:3001/v1/Login";
       const { data: res } = await axios.post(url, data);
-      navigate("/User");
       console.log(res);
+      localStorage.setItem("token", res.data);
+      navigate("/user");
     } catch (error) {
       setError(error.response.data.message);
     }
@@ -34,9 +35,11 @@ const Login = () => {
   return (
     <div className={styles.centered}>
       <Form onSubmit={handleSubmit}>
-        <div> {error && <div>{error}</div>}</div>
-        <h1>Log in</h1>
+        {error && <div className={styles.errors}>{error}</div>}
+        <h1 className={styles.title}>Log in</h1>
+
         <Input
+          className={styles.input}
           controlId="formBasicEmail"
           type="email"
           placeholder="Your Email"
@@ -46,6 +49,7 @@ const Login = () => {
         />
 
         <Input
+          className={styles.input}
           controlId="formBasicPassword"
           type="password"
           placeholder="Your Password"
@@ -53,18 +57,18 @@ const Login = () => {
           onChange={handleChange}
           value={data.password}
         />
-        <Form.Text>
-          
-          <a href="/">Forget Password?</a>
-        </Form.Text>
-        <Button className={styles.btn} variant="primary">
+        <div className={styles.forget_password}>
+          <p>
+            <a href="/">Forget Password?</a>
+          </p>
+        </div>
+        <Button className={styles.btn} variant="primary" type="submit">
           Sigin in
         </Button>
-        <div>
-          <p className={styles.text}>Don't have an account? </p>
-          <Link  to="/">
-            <span type="button">Sigin up</span>
-          </Link>
+        <div className={styles.footer}>
+          <p>
+            Don't have an account? <a href="/"> Sigin up</a>
+          </p>
         </div>
       </Form>
     </div>
